@@ -12,15 +12,14 @@ var colors = {
 }
 
 //List shape's relative points
-//May need to fix point's y axis and center
 var squares() {
-    I:  [[-1, 0], [0,0],   [1, 0], [2,0]],
-    O:  [[0, 0],  [1, 0],  [0, 1], [1, 1]],
-    T:  [[-1,0],  [0,0],   [1, 0], [0, 1]],
-    L:  [[0, -2], [0, -1], [0, 0], [1, 0]],
-    J:  [[0, -2], [0, -1], [0, 0], [-1, 0]],
-    S:  [[-1, 0], [0, 0],  [1, 0], [1, 1]],
-    Z:  [[-1, 1], [0, 1],  [0, 0], [1, 0]]
+    I:  [[-1, 0],  [0,0],   [1, 0],  [2,0]],
+    O:  [[0, 0],   [1, 0],  [0, -1], [1, -1]],
+    T:  [[-1,0],   [0,0],   [1, 0],  [0, -1]],
+    L:  [[0, 2],   [0, 1],  [0, 0],  [1, 0]],
+    J:  [[0, 2],   [0, 1],  [0, 0],  [-1, 0]],
+    S:  [[-1, 0],  [0, 0],  [1, 0],  [1, -1]],
+    Z:  [[-1, -1], [0, -1], [0, 0],  [1, 0]]
 }
 
 //Tetramino constructor
@@ -31,8 +30,7 @@ function Tetramino(shape){
     this.shape = shape;
     this.points = squares[shape];
     this.rotate = function() {
-        //Fix if change the y-axis of points in squares var
-        var rotation = math.matrix([[0,1],[-1,0]]);
+        var rotation = math.matrix([[0,-1],[1,0]]);
         for(i = 0; i < this.points.length; i++){
             this.points[i] = math.multiply(rotation, this.points[i]);
         }
@@ -46,8 +44,7 @@ function Tetramino(shape){
     this.get_points = function(){
         var out = [];
         this.points.forEach( function(p){
-            //also change this
-            out.push([this.pos.x + p[0], thix.pos.y - p[2]]);
+            out.push([this.pos.x + p[0], thix.pos.y + p[2]]);
         })
         return out;
     }
