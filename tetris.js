@@ -47,6 +47,7 @@ function Tetramino(shape){
             //also change this
             out.push([this.pos.x + p[0], thix.pos.y - p[2]]);
         }
+        return out;
     }
 }
 
