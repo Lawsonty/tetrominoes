@@ -37,6 +37,10 @@ function Tetramino(shape){
             this.points[i] = rotation * this.points[i];
         }
     };
+    this.translate = function(x, y) {
+        this.pos.x += x;
+        this.pos.y += y;
+    };
 }
 
 function Free_Block(x, y){
