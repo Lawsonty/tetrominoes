@@ -12,7 +12,7 @@ var colors = {
 }
 
 //List shape's relative points
-var squares() {
+var squares = {
     I:  [[-1, 0],  [0,0],   [1, 0],  [2,0]],
     O:  [[0, 0],   [1, 0],  [0, -1], [1, -1]],
     T:  [[-1,0],   [0,0],   [1, 0],  [0, -1]],
