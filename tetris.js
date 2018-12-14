@@ -41,6 +41,8 @@ function Tetramino(shape){
         this.pos.x += x;
         this.pos.y += y;
     };
+    //Return a list of points representing each of the tetraminoes
+    //squares
     this.get_points = function(){
         var out = [];
         this.points.forEach( function(p){
