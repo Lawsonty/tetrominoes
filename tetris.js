@@ -41,6 +41,13 @@ function Tetramino(shape){
         this.pos.x += x;
         this.pos.y += y;
     };
+    this.get_points = function(){
+        var out = [];
+        this.points.forEach( function(p){
+            //also change this
+            out.push([this.pos.x + p[0], thix.pos.y - p[2]]);
+        }
+    }
 }
 
 function Free_Block(x, y){
