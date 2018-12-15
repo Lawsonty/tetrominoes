@@ -17,10 +17,11 @@
         var rotation = math.matrix([[0, -1], [1, 0]]);
         var point = [0, 1];
         var newPoint = math.multiply(rotation, point);
+        var updateHTML = "";
         for (var i = 0; i < state.free_blocks.length; i++) {
-          document.getElementById("demo").innerHTML +=
-            state.free_blocks[i] + "\n";
+          updateHTML += state.free_blocks[i] + "<br>";
         }
+        document.getElementById("demo").innerHTML = updateHTML;
       }
     </script>
   </body>
