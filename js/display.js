@@ -20,16 +20,48 @@ renderer.setSize(width, height);
 
 var scene = new THREE.Scene;
 
+var chonk = 40;
+var rot = Math.PI/180
 
-var geom = new THREE.BoxGeometry(10,10,10);
-var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+
+var geom = new THREE.BoxGeometry(chonk,chonk,chonk);
+var geom_long = new THREE.BoxGeometry(chonk*10,chonk/10,chonk);
 var material = new THREE.MeshNormalMaterial();
+var material_long = new THREE.MeshNormalMaterial();
 var cube = new THREE.Mesh( geom, material );
-scene.add( cube );
+//scene.add( cube );
 
 
-var camera = new THREE.PerspectiveCamera(5, width / height, 0.1, 10000);
-camera.position.set(0, 350, 400);
+function cube_at( x, y, z) {
+    var tmp = new THREE.Mesh(geom, material);
+    tmp.position.x = x;
+    tmp.position.y = y;
+    tmp.position.z = z;
+
+    scene.add( tmp);
+
+}
+
+function bar_at (x, y, z, rotate){
+    var tmp = new THREE.Mesh(geom_long, material);
+    tmp.position.x = x;
+    tmp.position.y = y;
+    tmp.position.z = z;
+    if (rotate){
+        tmp.rotation.z += 90 * rot;
+    }
+    scene.add( tmp);
+}
+
+cube_at(0, 0, -10);
+cube_at(chonk+6, chonk+6, 0);
+cube_at(-(chonk+6), -(chonk+6), 0);
+
+bar_at(chonk/2+3, chonk/2+3, 0, true);
+
+
+var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+camera.position.set(0, 0, 400);
 scene.add(camera);
 
 camera.lookAt(cube.position);
@@ -37,7 +69,20 @@ camera.lookAt(cube.position);
 document.body.appendChild( renderer.domElement );
 
 
-var rot = Math.PI/180
+
+
+function draw_null() {
+    //nop for now
+    return;
+}
+
+function draw_filled(block, loc) {
+    
+
+
+    return;
+}
+
 
 function draw_frame() {
     renderer.render(scene, camera);
