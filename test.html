@@ -17,7 +17,9 @@ function myFunction() {
         var rotation = math.matrix([[0, -1],[1,0]])
         var point = [0,1]
         var newPoint =  math.multiply(rotation, point)
-        document.getElementById("demo").innerHTML = newPoint
+        for(var i = 0; i < state.free_blocks.length; i++){
+            document.getElementById("demo").innerHTML += state.free_blocks[i] + '\n';
+        }
 }
     </script>
 

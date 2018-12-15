@@ -1,3 +1,6 @@
+//Bounds for play area
+const X_BOUND = 30
+const Y_BOUND = 50
 //Define the types of shapes
 var shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 //Define the colors fo each shape
@@ -50,9 +53,10 @@ function Tetramino(shape){
     }
 }
 
-function Free_Block(x, y){
+function Free_Block(x, y, color){
     this.x = x;
     this.y = y;
+    thix.color = color
 }
 
 //Game state
@@ -61,4 +65,11 @@ function Free_Block(x, y){
 var state = {
     tetraminoes: [],
     free_blocks: []
+}
+
+for(var i = 0; i < Y_BOUND; i++){
+    state.free_blocks.push([])
+    for(var k = 0; k < X_BOUND; k++){
+        state.free_blocks[i].push(0);
+    }
 }
