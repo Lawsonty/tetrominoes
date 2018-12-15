@@ -59,6 +59,7 @@ class Tetramino{
     }
 }
 
+//Class for storing the coords and color of a free block.
 class Free_Block{
     constructor(x, y, color) {
         this.x = x;
