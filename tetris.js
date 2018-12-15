@@ -1,7 +1,6 @@
 //Bounds for play area
 const X_BOUND = 30
 const Y_BOUND = 50
-
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -72,7 +71,7 @@ class Tetramino{
     get_points(){
         var out = [];
         this.points.forEach( (p) => {
-            out.push([this.pos.x + p[0], thix.pos.y + p[2]]);
+            out.push([this.pos.x + p[0], this.pos.y + p[1]]);
         })
         return out;
     }
@@ -117,14 +116,14 @@ var state = {
         for(var i = 0; i < Y_BOUND; i++){
             for(var k = 0; k < X_BOUND; k++){
                 if(state.free_blocks[i][k][0] == 1){
-                    out.push(Free_Block(k, i, state.free_blocks[i][k][1]))
+                    out.push(new Free_Block(k, i, state.free_blocks[i][k][1]))
                 }
             }
         }
         if(state.tetraminoes != null){
-            state.tetraminoes.get_points.forEach(
+            state.tetraminoes.get_points().forEach(
                 (p) => {
-                    out.push(Free_Block(p[0], p[1], state.tetraminoes.color))
+                    out.push( new Free_Block(p[0], p[1], state.tetraminoes.color))
                 }
             )
         }
