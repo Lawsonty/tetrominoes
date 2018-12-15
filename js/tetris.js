@@ -1,6 +1,6 @@
 //Bounds for play area
 const X_BOUND = 10
-const Y_BOUND = 20
+const Y_BOUND = 21
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -99,23 +99,35 @@ var state = {
             var s = shapes[math.floor(math.random() * 7)]
             state.tetraminoes = state.next[state.next.length - 1]
             state.next[state.next.length - 1] = new Tetramino(s)
+            state.add_tetramino()
         } else {
+            state.remove_tetramino()
             var coll = !can_lower()
             //If there is a collision, then stop the tetramino and move it to the free blocks.
             //Set current tetramino to null
             if(coll){
-                state.tetraminoes.get_points().forEach( p => {
-                    state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
-                })
+                state.add_tetramino()
                 state.tetraminoes = null
             } else {
                 //No collision, so move tetramino down.
+                state.remove_tetramino()
                 state.tetraminoes.translate(0, -1)
+                state.add_tetramino()
             }
         }
         //Update number of ticks. Used for determining speed, and possibly rewind feature.
         state.ticks += 1
         return
+    },
+    add_tetramino: () => {
+        state.tetraminoes.get_points().forEach( p => {
+            state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
+        })
+    },
+    remove_tetramino: () => {
+        state.tetraminoes.get_points().forEach( p => {
+            state.free_blocks[p[1]][p[0]] = [0, null]
+        })
     },
     //Return a list of points of all blocks in the game.
     get_points: () => {
