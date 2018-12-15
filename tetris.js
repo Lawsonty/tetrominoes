@@ -1,6 +1,6 @@
 //Bounds for play area
-const X_BOUND = 30
-const Y_BOUND = 50
+const X_BOUND = 10
+const Y_BOUND = 20
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -28,13 +28,14 @@ const squares = {
 
 
 
+var state = {}
 
 //Tetramino constructor
 class Tetramino{
     constructor(shape) {
         this.color = colors[shape];
         this.rotation = 0;
-        this.pos = {x: 15, y: 50};
+        this.pos = {x: 5, y: 18};
         this.shape = shape;
         this.points = squares[shape];
     }
@@ -47,24 +48,8 @@ class Tetramino{
     //Translates tetramino by x and y, checking for a collision first.
     //0 == collision, 1 == side collision, 2 == bottom collision
     translate(x, y) {
-        var collision = 0
-        this.points.forEach(
-            (p) => {
-                var new_x = this.pos.x + x + p[0]
-                var new_y = this.pos.y + y + p[1]
-                if(new_x > X_BOUND || new_x < 0 || state.free_blocks[new_y][new_x][0] == 1){
-                    collision = 1;
-                    return;
-                }
-                if(new_y < 0 || state.free_blocks[new_y][new_x][0] == 1)
-                    collision = 2;
-            }
-        );
-        if(collision == 0){
-            this.pos.x += x;
-            this.pos.y += y;
-        }
-        return collision
+        this.pos.x += x;
+        this.pos.y += y;
     };
     //Return a list of points representing each of the tetraminoes
     //squares
@@ -95,17 +80,31 @@ var state = {
     free_blocks: [],
     ticks:  0,
     tick: function(){
+        var can_lower = () => {
+            collision = true;
+            state.tetraminoes.get_points().forEach( (p) => {
+                var new_x = p[0]
+                var new_y = p[1] - 1 
+                console.log(p)
+                if(new_y < 0 || state.free_blocks[new_y][new_x][0] == 1){
+                    collision = false;
+                }
+            })
+            return collision;
+        }
         if(state.tetraminoes == null) {
             var s = shapes[math.floor(math.random() * 7)]
             state.tetraminoes = state.next[state.next.length - 1]
             state.next[state.next.length - 1] = new Tetramino(s)
         } else {
-            var coll = state.tetraminoes.translate(0, -1)
-            if(coll == 2){
+            var coll = !can_lower()
+            if(coll){
                 state.tetraminoes.get_points().forEach( p => {
                     state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
                 })
                 state.tetraminoes = null
+            } else {
+                state.tetraminoes.translate(0, -1)
             }
         }
         state.ticks += 1
