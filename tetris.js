@@ -60,6 +60,13 @@ var state = {
                 }
             }
         }
+        if(state.tetraminoes != null){
+            state.tetraminoes.get_points.forEach(
+                (p) => {
+                    out.push(Free_Block(p[0], p[1], state.tetraminoes.color))
+                }
+            )
+        }
         return out
     }
 }
