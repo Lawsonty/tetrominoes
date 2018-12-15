@@ -27,9 +27,6 @@ const squares = {
 }
 
 
-
-var state = {}
-
 //Tetramino constructor
 class Tetramino{
     constructor(shape) {
