@@ -27,9 +27,6 @@ const squares = {
 }
 
 
-
-var state = {}
-
 //Tetramino constructor
 class Tetramino{
     constructor(shape) {
@@ -62,6 +59,7 @@ class Tetramino{
     }
 }
 
+//Class for storing the coords and color of a free block.
 class Free_Block{
     constructor(x, y, color) {
         this.x = x;
@@ -79,9 +77,13 @@ var state = {
     next: [new Tetramino(shapes[math.floor(math.random() * 7)])],
     free_blocks: [],
     ticks:  0,
+    //Advanced state one step.
+    //Moves current tetramino down one step, or drops a new tetramino
     tick: function(){
+        //Checks to see if block can be lowered
         var can_lower = () => {
             collision = true;
+            //Check each point on current tetramino and see if there is a block/floor immediately beneath it.
             state.tetraminoes.get_points().forEach( (p) => {
                 var new_x = p[0]
                 var new_y = p[1] - 1 
@@ -92,26 +94,33 @@ var state = {
             })
             return collision;
         }
+        //If there is no current tetramino, update it.
         if(state.tetraminoes == null) {
             var s = shapes[math.floor(math.random() * 7)]
             state.tetraminoes = state.next[state.next.length - 1]
             state.next[state.next.length - 1] = new Tetramino(s)
         } else {
             var coll = !can_lower()
+            //If there is a collision, then stop the tetramino and move it to the free blocks.
+            //Set current tetramino to null
             if(coll){
                 state.tetraminoes.get_points().forEach( p => {
                     state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
                 })
                 state.tetraminoes = null
             } else {
+                //No collision, so move tetramino down.
                 state.tetraminoes.translate(0, -1)
             }
         }
+        //Update number of ticks. Used for determining speed, and possibly rewind feature.
         state.ticks += 1
         return
     },
+    //Return a list of points of all blocks in the game.
     get_points: () => {
         out = []
+        //Grab all free block points
         for(var i = 0; i < Y_BOUND; i++){
             for(var k = 0; k < X_BOUND; k++){
                 if(state.free_blocks[i][k][0] == 1){
@@ -119,6 +128,7 @@ var state = {
                 }
             }
         }
+        //Grab points from current tetramino
         if(state.tetraminoes != null){
             state.tetraminoes.get_points().forEach(
                 (p) => {
@@ -129,6 +139,7 @@ var state = {
         return out
     }
 }
+//Initialize state
 for(var i = 0; i < Y_BOUND; i++){
     state.free_blocks.push([])
     for(var k = 0; k < X_BOUND; k++){
