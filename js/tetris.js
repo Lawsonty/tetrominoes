@@ -110,7 +110,6 @@ var state = {
                 state.tetraminoes = null
             } else {
                 //No collision, so move tetramino down.
-                state.remove_tetramino()
                 state.tetraminoes.translate(0, -1)
                 state.add_tetramino()
             }
@@ -119,11 +118,13 @@ var state = {
         state.ticks += 1
         return
     },
+    //Adds tetramino to state grid
     add_tetramino: () => {
         state.tetraminoes.get_points().forEach( p => {
             state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
         })
     },
+    //Remove tetramino from state grid
     remove_tetramino: () => {
         state.tetraminoes.get_points().forEach( p => {
             state.free_blocks[p[1]][p[0]] = [0, null]
