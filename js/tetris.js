@@ -1,6 +1,6 @@
 //Bounds for play area
 const X_BOUND = 10
-const Y_BOUND = 21
+const Y_BOUND = 20
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -28,7 +28,7 @@ const squares = {
 
 const sq_pos = {
     I: {x: 5, y: 18},
-    O: {x: 5.5, y: 18.5},
+    O: {x: 4.5, y: 18.5},
     T: {x: 5, y: 18},
     L: {x: 5, y: 18},
     J: {x: 5, y: 18},
@@ -119,7 +119,9 @@ class State {
             //Set current tetramino to null
             if(coll){
                 this.add_tetramino()
+                var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND)
                 this.tetraminoes = null
+                return out
             } else {
                 //No collision, so move tetramino down.
                 this.tetraminoes.translate(0, -1)
