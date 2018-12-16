@@ -6,13 +6,13 @@ const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
 //Define the colors fo each shape
 const colors = {
-    I:  "Cyan",
-    O:  "Yellow",
-    T:  "Magenta",
-    L:  "Blue",
-    J:  "Orange",
-    S:  "Green",
-    Z:  "Red"
+    I:  "#00FFFF",
+    O:  "#FFFF00",
+    T:  "#FF00FF",
+    L:  "#0000FF",
+    J:  "#FFA500",
+    S:  "#008000",
+    Z:  "#FF0000"
 }
 
 //List shape's relative points
@@ -34,10 +34,10 @@ class Tetramino{
         this.rotation = 0;
         this.pos = {x: 5, y: 18};
         this.shape = shape;
-        this.points = squares[shape];
+        this.points = squares[shape].slice();
     }
     rotate() {
-        var rotation = math.matrix([[0,-1],[1,0]]);
+        var rotation = math.matrix([[0,1],[-1,0]]);
         for(i = 0; i < this.points.length; i++){
             this.points[i] = math.multiply(rotation, this.points[i])._data;
         }
@@ -123,7 +123,7 @@ var state = {
         var coll = false
         points.forEach( (p) => {
             if (p[0] < 0 || p[0] >= X_BOUND || p[1] < 0 || 
-                state.free_blocks[p[1]][p[0]] == 1){
+                state.free_blocks[p[1]][p[0]][0] == 1){
                 coll = true
             }
         })
@@ -203,6 +203,6 @@ var state = {
 for(var i = 0; i < Y_BOUND; i++){
     state.free_blocks.push([])
     for(var k = 0; k < X_BOUND; k++){
-        state.free_blocks[i].push([0]);
+        state.free_blocks[i].push([0, null]);
     }
 }
