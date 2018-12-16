@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <meta charset="UTF-8" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js" type="text/javascript"></script>
-<script src="../js/tetris.js" type="text/javascript"></script>
-<script src = "../js/three.js" type="text/javascript"></script>
+<script src = "js/three.js" type="text/javascript"></script>
+<script src="js/tetris.js" type="text/javascript"></script>
 
 <head>
     <link rel="stylesheet" href="/public/index.css">
@@ -11,10 +11,15 @@
 
 <body>
     <!-- <p>Click the button to test the function.</p> -->
-    <div id="demo"></div>
-
     <canvas id="tetro_window" width="400" height="800" style="border:1px solid #000000;" >
     </canvas>
+    <div id="demo"></div>
+
+    <script id="t_vert_shader" type="x-shader/x-vertex">
+        uniform float time;
+    
+    </script>
+
 
     <script>
         var tickCount = 0;
@@ -44,6 +49,7 @@
                 state.tick();
             }
             boardUpdate();
+            disp.display(state.free_blocks)
             //state.clear_rows()
             tickCount++;
         }
@@ -63,8 +69,10 @@
             }
         })
 
+        var disp;
         function startFunc() {
             if (intervalObj == null) {
+                disp = new Display("tetro_window");
                 intervalObj = window.setInterval(myFunction, 100);
             }            
         }
@@ -82,7 +90,7 @@
 
         boardUpdate();
     </script>
-    <script src = "../js/display.js" type="text/javascript"></script>
+    <script src = "js/display.js" type="text/javascript"></script>
 
     <div id="btnDiv">
         <button onclick="startFunc()">Start</button>
