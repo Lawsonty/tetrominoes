@@ -1,6 +1,6 @@
 //Bounds for play area
 const X_BOUND = 10
-const Y_BOUND = 21
+const Y_BOUND = 20
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -22,13 +22,13 @@ const squares = {
     T:  [[-1,0],   [0, 0],  [1, 0],  [0, -1]],
     L:  [[0, 1],   [0, 0],  [0, -1],  [1, -1]],
     J:  [[0, 1],   [0, 0],  [0, -1],  [-1, -1]],
-    S:  [[-1, 0],  [0, 0],  [1, 0],  [1, -1]],
+    S:  [[1, -1],  [0, -1],  [0, 0],  [-1, 0]],
     Z:  [[-1, -1], [0, -1], [0, 0],  [1, 0]]
 }
 
 const sq_pos = {
     I: {x: 5, y: 18},
-    O: {x: 5.5, y: 18.5},
+    O: {x: 4.5, y: 18.5},
     T: {x: 5, y: 18},
     L: {x: 5, y: 18},
     J: {x: 5, y: 18},
@@ -82,144 +82,151 @@ class Free_Block{
 //Game state
 //Tetraminoes is the list of all floating tetraminoes
 //free_blocks is the list of points no longer part of floating tetraminoes
-var state = {
-    tetraminoes: null,
-    next: [new Tetramino(shapes[math.floor(math.random() * 7)])],
-    free_blocks: [],
-    ticks:  0,
+class State {
+    constructor() {
+        this.tetraminoes = null;
+        this.next = [];
+        this.free_blocks = [];
+        this.ticks = 0;
+        this.reset()
+    };
     //Advanced state one step.
     //Moves current tetramino down one step, or drops a new tetramino
-    tick: function(){
+    tick() {
         //Checks to see if block can be lowered
         var can_lower = () => {
-            collision = true;
+            var collision = true;
             //Check each point on current tetramino and see if there is a block/floor immediately beneath it.
-            state.tetraminoes.get_points().forEach( (p) => {
+            this.tetraminoes.get_points().forEach( (p) => {
                 var new_x = p[0]
                 var new_y = p[1] - 1 
-                if(new_y < 0 || state.free_blocks[new_y][new_x][0] == 1){
+                if(new_y < 0 || this.free_blocks[new_y][new_x][0] == 1){
                     collision = false;
                 }
             })
             return collision;
         }
         //If there is no current tetramino, update it.
-        if(state.tetraminoes == null) {
+        if(this.tetraminoes == null) {
             var s = shapes[math.floor(math.random() * 7)]
-            state.tetraminoes = state.next[state.next.length - 1]
-            state.next[state.next.length - 1] = new Tetramino(s)
-            state.add_tetramino()
+            this.tetraminoes = this.next.pop()
+            console.log(this.tetraminoes)
+            if(this.next.length == 0){
+                this.next.push(new Tetramino(s))
+            }
+            this.add_tetramino()
         } else {
-            state.remove_tetramino()
+            this.remove_tetramino()
             var coll = !can_lower()
             //If there is a collision, then stop the tetramino and move it to the free blocks.
             //Set current tetramino to null
             if(coll){
-                state.add_tetramino()
-                state.tetraminoes = null
+                this.add_tetramino()
+                console.log(this.tetraminoes.get_points())
+                var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND - 2)
+                this.tetraminoes = null
+                return !out
             } else {
                 //No collision, so move tetramino down.
-                state.tetraminoes.translate(0, -1)
-                state.add_tetramino()
+                this.tetraminoes.translate(0, -1)
+                this.add_tetramino()
             }
         }
         //Update number of ticks. Used for determining speed, and possibly rewind feature.
-        state.ticks += 1
-        return
-    },
+        this.ticks += 1
+        return true
+    };
     //Checks if points are already filled
-    collision: (points) => {
+    collision(points) {
         var coll = false
         points.forEach( (p) => {
             if (p[0] < 0 || p[0] >= X_BOUND || p[1] < 0 || 
-                state.free_blocks[p[1]][p[0]][0] == 1){
+                this.free_blocks[p[1]][p[0]][0] == 1){
                 coll = true
             }
         })
         return coll
 
-    },
+    };
     //Rotate current tetramino
-    rotate_tetramino: () => {
-        state.remove_tetramino()
-        state.tetraminoes.rotate()
+    rotate_tetramino() {
+        this.remove_tetramino()
+        this.tetraminoes.rotate()
         //If there is a collision, then rotate tetramino back.
-        if(state.collision(state.tetraminoes.get_points())){
-            state.tetraminoes.rotate()
-            state.tetraminoes.rotate()
-            state.tetraminoes.rotate()
+        if(this.collision(this.tetraminoes.get_points())){
+            this.tetraminoes.rotate()
+            this.tetraminoes.rotate()
+            this.tetraminoes.rotate()
         }
-        state.add_tetramino()
-    },
+        this.add_tetramino()
+    };
     //Horizonally shift the current tetramino by x
-    shiftx_tetramino: (x) => {
-        state.remove_tetramino()
-        var points = state.tetraminoes.get_points()
-        points = points.map( (y) => [y[0] + x, y[1]] )
+    shift_tetramino(x, y1){
+        this.remove_tetramino()
+        var points = this.tetraminoes.get_points()
+        points = points.map( (y) => [y[0] + x, y[1] + y1] )
         //If there is not a collision, then translate the tetramino
-        if(!state.collision(points)){
-           state.tetraminoes.translate(x, 0)
+        if(!this.collision(points)){
+           this.tetraminoes.translate(x, y1)
         }
-        state.add_tetramino()
-    },
+        this.add_tetramino()
+    };
     //Adds tetramino to state grid
-    add_tetramino: () => {
-        state.tetraminoes.get_points().forEach( p => {
-            state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
+    add_tetramino() {
+        this.tetraminoes.get_points().forEach( p => {
+            this.free_blocks[p[1]][p[0]] = [1, this.tetraminoes.color]
         })
-    },
+    };
     //Clears out full rows and returns a list of rows that were cleared
-    clear_rows: () => {
-        var out = []
-        var offset = 0
-        for(var i = 0; i < (Y_BOUND - 1 - offset); i++){
-            do {
-                if(state.free_blocks[i].every( (val) => val[0] == 1)) {
-                    state.free_blocks[i] = state.free_blocks[i].map( (x) => [0, null])
-                    out.push(i)
-                    offset += 1
-                }
-                for(var k = 0; k < X_BOUND; k++){
-                    state.free_blocks[i][k] = state.free_blocks[i+1 + offset][k] 
-                    state.free_blocks[i+1 + offset][k] = [0, null]
-                }
+    clear_rows(){
+        this.remove_tetramino()
+        var clear = (x) => {
+            for(var i = x; i < Y_BOUND - 1; i++){
+                this.free_blocks[i].forEach( (x, j) => {
+                    this.free_blocks[i][j] = this.free_blocks[i + 1][j]
+                    this.free_blocks[i+1][j] = [0, null]
+                })
             }
-            while(state.free_blocks[i].every( (val) => val[0] ==1));
         }
-        return out
-    },
-    //Remove tetramino from state grid
-    remove_tetramino: () => {
-        state.tetraminoes.get_points().forEach( p => {
-            state.free_blocks[p[1]][p[0]] = [0, null]
-        })
-    },
-    //Resets states variables.
-    reset: () => {
-        state.tetraminoes = null
-        state.next = [new Tetramino(shapes[math.floor(math.random() * 7)])]
-        state.free_blocks = []
-        state.ticks = 0
         for(var i = 0; i < Y_BOUND; i++){
-            state.free_blocks.push([])
-            for(var k = 0; k < X_BOUND; k++){
-                state.free_blocks[i].push([0, null]);
+            if(this.free_blocks[i].every( (val) => val[0] == 1 )){
+                clear(i)
+                i--
             }
         }
-    },
+        this.add_tetramino()
+    };
+    //Remove tetramino from state grid
+    remove_tetramino() {
+        this.tetraminoes.get_points().forEach( p => {
+            this.free_blocks[p[1]][p[0]] = [0, null]
+        })
+    };
+    //Resets states variables.
+    reset() {
+        this.tetraminoes = null
+        this.next = [new Tetramino(shapes[math.floor(math.random() * 7)])]
+        this.free_blocks = []
+        this.ticks = 0
+        for(var i = 0; i < Y_BOUND; i++){
+            this.free_blocks.push([])
+            for(var k = 0; k < X_BOUND; k++){
+                this.free_blocks[i].push([0, null]);
+            }
+        }
+    };
     //Return a list of points of all blocks in the game.
-    get_points: () => {
+    get_points(){
         out = []
         //Grab all free block points
         for(var i = 0; i < Y_BOUND; i++){
             for(var k = 0; k < X_BOUND; k++){
-                if(state.free_blocks[i][k][0] == 1){
-                    out.push(new Free_Block(k, i, state.free_blocks[i][k][1]))
+                if(this.free_blocks[i][k][0] == 1){
+                    out.push(new Free_Block(k, i, this.free_blocks[i][k][1]))
                 }
             }
         }
         return out
     }
 }
-//Initialize state
-state.reset()
+var state = new State()
