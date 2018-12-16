@@ -1,0 +1,1 @@
+var socket = io.connect('http://71.193.188.235:8080/');
