@@ -8,6 +8,8 @@ Erich's place
 var cnv = document.getElementById("tetro_window");
 
 
+/*Render testing object*/
+
 const matrix = new Array(21).fill(0).map(() => new Array(11).fill([0]));
 matrix[0][0] = [1, "Cyan"];
 matrix[1][0] = [1, "Yellow"];
@@ -94,11 +96,13 @@ function display(grid){
 
 
 function new_scene(g){
-
-
     var s = new THREE.Scene;
-    //s.add(camera);
-    s.add(light);
+    if( camera ){
+        s.add(camera);
+    }
+    if( light ){
+        s.add(light);
+    }
     //add camera, add light object
     
     //have to define i < 20 here. 
@@ -111,13 +115,10 @@ function new_scene(g){
                 //console.log(block);
                 s.add(block);
             }
-
         }
     }
 
-
     return s;
-
 }
 
 
@@ -125,19 +126,10 @@ function init(){
     renderer = new THREE.WebGLRenderer( {canvas: tetro_window} );
     renderer.setSize(width, height);
 
+    /*INIT SCENE WITH MATRIX*/
     scene = new_scene(matrix);
 
-
-    //place holder to point the camera at. Fix this later.
-    var tmpg = new THREE.BoxGeometry(chunk_size, chunk_size, chunk_size);
-    var tmpm = new THREE.MeshNormalMaterial();
-    var cube = new THREE.Mesh( tmpg,tmpm);
-    scene.add( cube );
-
-
-    light = new THREE.AmbientLight( 0xffffff, 2.0 );
-
-    //new THREE.Vector3(0, 0, -1)
+    /*ADD CAMERA OBJECT*/
     //Camera( left plane, right plane, top plane, bottom plane, nearest object to view, farthest distance to view)
     //SEE: https://en.wikipedia.org/wiki/Viewing_frustum or Three.js docs.
     camera = new THREE.OrthographicCamera( width/-2, width/2, height/2, height/-2, 1, 1000);
@@ -145,14 +137,14 @@ function init(){
     //because this is ortho camera z does not matter. 500 is just a placeholder
     //and would be an okay value for perspective
     camera.position.set( chunk_size*(TETRIS_COL/2) , chunk_size*(TETRIS_ROW/2), 500);
-    camera_focus = cube.position;
-    camera_focus.x = chunk_size * 5;
-    camera_focus.y = chunk_size*10;
 
-    camera.lookAt(cube.position);
+    camera_focus = new THREE.Vector3(chunk_size*5, chunk_size*10, 0);
+    camera.lookAt(camera_focus);
     scene.add(camera);
 
 
+    /*ADD AMBIENT LIGHT OBJECT*/
+    light = new THREE.AmbientLight( 0xffffff, 2.0 );
     scene.add(light);
 
     document.body.appendChild( renderer.domElement);
