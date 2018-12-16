@@ -34,7 +34,7 @@ class Tetramino{
         this.rotation = 0;
         this.pos = {x: 5, y: 18};
         this.shape = shape;
-        this.points = squares[shape];
+        this.points = squares[shape].slice();
     }
     rotate() {
         var rotation = math.matrix([[0,-1],[1,0]]);
