@@ -176,6 +176,20 @@ class State {
     };
     //Clears out full rows and returns a list of rows that were cleared
     clear_rows(){
+        var clear = (x) => {
+            for(var i = x; i < Y_BOUND - 1; i++){
+                this.free_blocks[i].forEach( (x, j) => {
+                    free_blocks[i][j] = free_blocks[i + 1][j]
+                    free_blocks[i+1][j] = [0, null]
+                })
+            }
+        }
+        for(var i = 0; i < Y_BOUND; i++){
+            if(this.free_blocks[i].every( (val) => val[0] == 1 )){
+                clear(i)
+                i--
+            }
+        })
     };
     //Remove tetramino from state grid
     remove_tetramino() {
