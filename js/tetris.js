@@ -39,7 +39,7 @@ class Tetramino{
     rotate() {
         var rotation = math.matrix([[0,-1],[1,0]]);
         for(i = 0; i < this.points.length; i++){
-            this.points[i] = math.multiply(rotation, this.points[i]);
+            this.points[i] = math.multiply(rotation, this.points[i])._data;
         }
     };
     //Translates tetramino by x and y, checking for a collision first.
@@ -117,6 +117,33 @@ var state = {
         //Update number of ticks. Used for determining speed, and possibly rewind feature.
         state.ticks += 1
         return
+    },
+    //Checks if points are already filled
+    collision: (points) => {
+        var coll = false
+        points.forEach( (p) => {
+            if (p[0] < 0 || p[0] > X_BOUND || p[1] < 0 || 
+                state.free_blocks[p[1]][p[0]] == 1){
+                coll = true
+            }
+        })
+        return coll
+
+    },
+    //Rotate current tetramino
+    rotate_tetramino: () => {
+        state.remove_tetramino()
+        state.tetraminoes.rotate()
+        if(state.collision(state.tetraminoes.get_points())){
+            state.tetraminoes.rotate()
+            state.tetraminoes.rotate()
+            state.tetraminoes.rotate()
+        }
+        state.add_tetramino()
+    },
+    //Horizonally shift the current tetramino by x
+    shiftx_tetramino: (x) => {
+
     },
     //Adds tetramino to state grid
     add_tetramino: () => {
