@@ -88,6 +88,7 @@ class State {
         this.next = [];
         this.free_blocks = [];
         this.ticks = 0;
+        this.score = 0;
         this.reset()
     };
     //Advanced state one step.
@@ -179,7 +180,9 @@ class State {
     };
     //Clears out full rows and returns a list of rows that were cleared
     clear_rows(){
+        //dont move current tetramino
         this.remove_tetramino()
+        //Remove row x and shift everything down
         var clear = (x) => {
             for(var i = x; i < Y_BOUND - 1; i++){
                 this.free_blocks[i].forEach( (x, j) => {
@@ -189,8 +192,10 @@ class State {
             }
         }
         for(var i = 0; i < Y_BOUND; i++){
+            //If row is full, then clear it.
             if(this.free_blocks[i].every( (val) => val[0] == 1 )){
                 clear(i)
+                this.score++
                 i--
             }
         }
@@ -208,6 +213,7 @@ class State {
         this.next = [new Tetramino(shapes[math.floor(math.random() * 7)])]
         this.free_blocks = []
         this.ticks = 0
+        this.score = 0
         for(var i = 0; i < Y_BOUND; i++){
             this.free_blocks.push([])
             for(var k = 0; k < X_BOUND; k++){
