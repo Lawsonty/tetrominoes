@@ -109,8 +109,11 @@ class State {
         //If there is no current tetramino, update it.
         if(this.tetraminoes == null) {
             var s = shapes[math.floor(math.random() * 7)]
-            this.tetraminoes = this.next[this.next.length - 1]
-            this.next[this.next.length - 1] = new Tetramino(s)
+            this.tetraminoes = this.next.pop()
+            console.log(this.tetraminoes)
+            if(this.next.length == 0){
+                this.next.push(new Tetramino(s))
+            }
             this.add_tetramino()
         } else {
             this.remove_tetramino()
