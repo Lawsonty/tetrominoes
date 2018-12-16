@@ -22,7 +22,7 @@ const squares = {
     T:  [[-1,0],   [0, 0],  [1, 0],  [0, -1]],
     L:  [[0, 1],   [0, 0],  [0, -1],  [1, -1]],
     J:  [[0, 1],   [0, 0],  [0, -1],  [-1, -1]],
-    S:  [[-1, 0],  [0, 0],  [1, 0],  [1, -1]],
+    S:  [[1, -1],  [0, -1],  [0, 0],  [-1, 0]],
     Z:  [[-1, -1], [0, -1], [0, 0],  [1, 0]]
 }
 
@@ -119,9 +119,10 @@ class State {
             //Set current tetramino to null
             if(coll){
                 this.add_tetramino()
-                var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND)
+                console.log(this.tetraminoes.get_points())
+                var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND - 2)
                 this.tetraminoes = null
-                return out
+                return !out
             } else {
                 //No collision, so move tetramino down.
                 this.tetraminoes.translate(0, -1)
@@ -130,7 +131,7 @@ class State {
         }
         //Update number of ticks. Used for determining speed, and possibly rewind feature.
         this.ticks += 1
-        return
+        return true
     };
     //Checks if points are already filled
     collision(points) {
@@ -175,23 +176,6 @@ class State {
     };
     //Clears out full rows and returns a list of rows that were cleared
     clear_rows(){
-        var out = []
-        var offset = 0
-        for(var i = 0; i < (Y_BOUND - 1 - offset); i++){
-            do {
-                if(this.free_blocks[i].every( (val) => val[0] == 1)) {
-                    this.free_blocks[i] = this.free_blocks[i].map( (x) => [0, null])
-                    out.push(i)
-                    offset += 1
-                }
-                for(var k = 0; k < X_BOUND; k++){
-                    this.free_blocks[i][k] = this.free_blocks[i+1 + offset][k] 
-                    this.free_blocks[i+1 + offset][k] = [0, null]
-                }
-            }
-            while(this.free_blocks[i].every( (val) => val[0] ==1));
-        }
-        return out
     };
     //Remove tetramino from state grid
     remove_tetramino() {

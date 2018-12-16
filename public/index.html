@@ -37,7 +37,9 @@
 
         function myFunction() {
             if (tickCount % 10 == 0) {
-                state.tick();
+                if(!state.tick()){
+                    pauseFunc();
+                }
             }
             boardUpdate();
             //state.clear_rows()
