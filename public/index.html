@@ -10,26 +10,16 @@
 
 <body>
     <!-- <p>Click the button to test the function.</p> -->
-    <div id="btnDiv">
-        <button onclick="startFunc()">Start</button>
-        <button onclick="stopFunc()">Stop</button>
-    </div>
-
     <div id="demo"></div>
-
-
 
     <script>
         var tickCount = 0;
         var intervalObj = null;
 
-        function myFunction() {
-            if (tickCount % 10 == 0) {
-                state.tick();
-            }
-
+        function boardUpdate() {
             var updateHTML = "";
             var blockColor = "";
+
             for (var i = state.free_blocks.length - 1; i >= 0; i--) {
                 updateHTML += `<span class=row>`
                 for (var j = 0; j < state.free_blocks[i].length; j++) {
@@ -43,6 +33,13 @@
                 updateHTML += "<br>";
             }
             document.getElementById("demo").innerHTML = updateHTML;
+        }
+
+        function myFunction() {
+            if (tickCount % 10 == 0) {
+                state.tick();
+            }
+            boardUpdate();
             //state.clear_rows()
             tickCount++;
         }
@@ -63,13 +60,30 @@
         })
 
         function startFunc() {
-            intervalObj = window.setInterval(myFunction, 100);
+            if (intervalObj == null) {
+                intervalObj = window.setInterval(myFunction, 100);
+            }            
         }
 
-        function stopFunc() {
+        function pauseFunc() {
             window.clearInterval(intervalObj);
+            intervalObj = null;
         }
+
+        function resetFunc() {
+            pauseFunc();
+            state.reset();
+            boardUpdate();
+        }
+
+        boardUpdate();
     </script>
+
+    <div id="btnDiv">
+        <button onclick="startFunc()">Start</button>
+        <button onclick="pauseFunc()">Pause</button>
+        <button onclick="resetFunc()">Reset</button>
+    </div>
 </body>
 
 </html>
