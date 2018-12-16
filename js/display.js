@@ -20,7 +20,7 @@ renderer.setSize(width, height);
 
 var scene = new THREE.Scene;
 
-var chonk = 40;
+var chonk = 10;
 var rot = Math.PI/180
 
 
@@ -52,20 +52,35 @@ function bar_at (x, y, z, rotate){
     }
     scene.add( tmp);
 }
-
+/*
 cube_at(0, 0, -10);
-cube_at(chonk+6, chonk+6, 0);
-cube_at(-(chonk+6), -(chonk+6), 0);
+cube_at(chonk, chonk, 0);
+cube_at(-(chonk), -(chonk), 0);
+*/
+for( i = 0; i < 10; i++){
+    cube_at(chonk*i, chonk*i, 0);
 
-bar_at(chonk/2+3, chonk/2+3, 0, true);
+}
+
+console.log(i);
+for( ; i < 20; i++){
+    cube_at(chonk*10, chonk*i, 0);
+}
+
+//bar_at(chonk/2+3, chonk/2+3, 0, true);
 
 
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
 camera.position.set(0, 0, 400);
 scene.add(camera);
 
-camera.lookAt(cube.position);
 
+camera_focus = cube.position;
+camera_focus.x = 50;
+camera_focus.y = 50;
+
+camera.lookAt(cube.position);
+console.log(cube.position);
 document.body.appendChild( renderer.domElement );
 
 
