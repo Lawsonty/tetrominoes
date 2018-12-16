@@ -37,7 +37,7 @@ class Tetramino{
         this.points = squares[shape].slice();
     }
     rotate() {
-        var rotation = math.matrix([[0,-1],[1,0]]);
+        var rotation = math.matrix([[0,1],[-1,0]]);
         for(i = 0; i < this.points.length; i++){
             this.points[i] = math.multiply(rotation, this.points[i])._data;
         }
@@ -123,7 +123,7 @@ var state = {
         var coll = false
         points.forEach( (p) => {
             if (p[0] < 0 || p[0] >= X_BOUND || p[1] < 0 || 
-                state.free_blocks[p[1]][p[0]] == 1){
+                state.free_blocks[p[1]][p[0]][0] == 1){
                 coll = true
             }
         })
