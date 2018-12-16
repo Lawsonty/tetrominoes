@@ -18,12 +18,22 @@ const colors = {
 //List shape's relative points
 const squares = {
     I:  [[-1, 0],  [0, 0],  [1, 0],  [2, 0]],
-    O:  [[0, 0],   [1, 0],  [0, -1], [1, -1]],
+    O:  [[-0.5, 0.5],   [0.5, 0.5],  [0.5, -0.5], [-0.5, -0.5]],
     T:  [[-1,0],   [0, 0],  [1, 0],  [0, -1]],
-    L:  [[0, 2],   [0, 1],  [0, 0],  [1, 0]],
-    J:  [[0, 2],   [0, 1],  [0, 0],  [-1, 0]],
+    L:  [[0, 1],   [0, 0],  [0, -1],  [1, -1]],
+    J:  [[0, 1],   [0, 0],  [0, -1],  [-1, -1]],
     S:  [[-1, 0],  [0, 0],  [1, 0],  [1, -1]],
     Z:  [[-1, -1], [0, -1], [0, 0],  [1, 0]]
+}
+
+const sq_pos = {
+    I: {x: 5, y: 18},
+    O: {x: 5.5, y: 18.5},
+    T: {x: 5, y: 18},
+    L: {x: 5, y: 18},
+    J: {x: 5, y: 18},
+    S: {x: 5, y: 18},
+    Z: {x: 5, y: 18}
 }
 
 
@@ -32,7 +42,7 @@ class Tetramino{
     constructor(shape) {
         this.color = colors[shape];
         this.rotation = 0;
-        this.pos = {x: 5, y: 18};
+        this.pos = {x: sq_pos[shape].x, y: sq_pos[shape].y};
         this.shape = shape;
         this.points = squares[shape].slice();
     }
@@ -87,7 +97,6 @@ var state = {
             state.tetraminoes.get_points().forEach( (p) => {
                 var new_x = p[0]
                 var new_y = p[1] - 1 
-                console.log(p)
                 if(new_y < 0 || state.free_blocks[new_y][new_x][0] == 1){
                     collision = false;
                 }
