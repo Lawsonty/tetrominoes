@@ -3,11 +3,20 @@ body {
     float: left;
 }
 
-span.block{
+span.block {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+
     border-style: solid;
     border-width: thin;
 }
 
+#demo {
+    border-style: solid;
+}
+
 #btnDiv {
     padding: 10px 0px;
+    text-align: center;
 }
