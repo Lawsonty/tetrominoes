@@ -70,14 +70,14 @@ function gen_block(x, y, color){
 
 
 class Display{
-    constructor(name, canvas) {
+    constructor(canvas) {
         //attempt to grab what we can find
-        if( !name ){
-            name = "tetro_window"
+        if( !canvas ){
+            canvas = "tetro_window"
         }
         
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.canvas="tetro_window"
+        this.renderer = new THREE.WebGLRenderer( {canvas: document.getElementById(canvas)} );
+        //this.renderer.canvas=canvas
         this.renderer.setSize(width, height);
 
         /*INIT SCENE WITH MATRIX*/
@@ -100,12 +100,17 @@ class Display{
         /*ADD AMBIENT LIGHT OBJECT*/
         this.light = new THREE.AmbientLight( 0xffffff, 2.0 );
         this.light.castShadow = true;
+        //this.scene.add(this.light);
+
+        this.light = new THREE.PointLight( 0xffffff, 100.0, 600);
+        this.light.position.set( chunk_size*(TETRIS_COL/2), chunk_size*(TETRIS_ROW/2), 300);
         this.scene.add(this.light);
 
-        document.body.appendChild( this.renderer.domElement);
+
+
 
         this.draw_frame();
-    }
+    };
 
     new_scene(g){
         var s = new THREE.Scene;
@@ -123,27 +128,25 @@ class Display{
                 
                 if( current[0] ){
                     var block = gen_block( j, i, current[1]);
-                    //console.log(block);
                     s.add(block);
                 }
             }
         }
         return s;
-    }
+    };
 
+    draw_frame() {
+        this.renderer.render(this.scene, this.camera);
+        console.log("Render loop");
+        //loop again
+        requestAnimationFrame(this.draw_frame.bind(this));
+    };
 
     display(grid){
         this.scene = this.new_scene(grid);
         return;
-    }
+    };
 
-    draw_frame() {
-        this.renderer.render(this.scene, this.camera);
-            
-        console.log("Render loop");
-        //loop again
-        requestAnimationFrame(this.draw_frame);
-    }
 }
 
 
