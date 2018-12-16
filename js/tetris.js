@@ -48,7 +48,7 @@ class Tetramino{
     }
     rotate() {
         var rotation = math.matrix([[0,1],[-1,0]]);
-        for(i = 0; i < this.points.length; i++){
+        for(var i = 0; i < this.points.length; i++){
             this.points[i] = math.multiply(rotation, this.points[i])._data;
         }
     };
