@@ -122,7 +122,7 @@ var state = {
     collision: (points) => {
         var coll = false
         points.forEach( (p) => {
-            if (p[0] < 0 || p[0] > X_BOUND || p[1] < 0 || 
+            if (p[0] < 0 || p[0] >= X_BOUND || p[1] < 0 || 
                 state.free_blocks[p[1]][p[0]] == 1){
                 coll = true
             }
@@ -134,6 +134,7 @@ var state = {
     rotate_tetramino: () => {
         state.remove_tetramino()
         state.tetraminoes.rotate()
+        //If there is a collision, then rotate tetramino back.
         if(state.collision(state.tetraminoes.get_points())){
             state.tetraminoes.rotate()
             state.tetraminoes.rotate()
@@ -143,7 +144,14 @@ var state = {
     },
     //Horizonally shift the current tetramino by x
     shiftx_tetramino: (x) => {
-
+        state.remove_tetramino()
+        var points = state.tetraminoes.get_points()
+        points = points.map( (y) => [y[0] + x, y[1]] )
+        //If there is not a collision, then translate the tetramino
+        if(!state.collision(points)){
+           state.tetraminoes.translate(x, 0)
+        }
+        state.add_tetramino()
     },
     //Adds tetramino to state grid
     add_tetramino: () => {
