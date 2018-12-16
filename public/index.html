@@ -43,6 +43,7 @@
                 updateHTML += "<br>";
             }
             document.getElementById("demo").innerHTML = updateHTML;
+            //state.clear_rows()
             tickCount++;
         }
 
@@ -62,7 +63,7 @@
         })
 
         function startFunc() {
-            intervalObj = window.setInterval(myFunction, 10);
+            intervalObj = window.setInterval(myFunction, 100);
         }
 
         function stopFunc() {
