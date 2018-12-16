@@ -176,14 +176,6 @@ var state = {
                 }
             }
         }
-        //Grab points from current tetramino
-        if(state.tetraminoes != null){
-            state.tetraminoes.get_points().forEach(
-                (p) => {
-                    out.push( new Free_Block(p[0], p[1], state.tetraminoes.color))
-                }
-            )
-        }
         return out
     }
 }
