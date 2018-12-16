@@ -1,0 +1,13 @@
+body {
+    font-family: "Lucida Console", Monaco, monospace;
+    float: left;
+}
+
+span.block{
+    border-style: solid;
+    border-width: thin;
+}
+
+#btnDiv {
+    padding: 10px 0px;
+}
