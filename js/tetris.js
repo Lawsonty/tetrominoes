@@ -159,6 +159,26 @@ var state = {
             state.free_blocks[p[1]][p[0]] = [1, state.tetraminoes.color]
         })
     },
+    //Clears out full rows and returns a list of rows that were cleared
+    clear_rows: () => {
+        var out = []
+        var offset = 0
+        for(var i = 0; i < (Y_BOUND - 1 - offset); i++){
+            do {
+                if(state.free_blocks[i].every( (val) => val[0] == 1)) {
+                    state.free_blocks[i] = state.free_blocks[i].map( (x) => [0, null])
+                    out.push(i)
+                    offset += 1
+                }
+                for(var k = 0; k < X_BOUND; k++){
+                    state.free_blocks[i][k] = state.free_blocks[i+1 + offset][k] 
+                    state.free_blocks[i+1 + offset][k] = [0, null]
+                }
+            }
+            while(state.free_blocks[i].every( (val) => val[0] ==1));
+        }
+        return out
+    },
     //Remove tetramino from state grid
     remove_tetramino: () => {
         state.tetraminoes.get_points().forEach( p => {
