@@ -1,0 +1,34 @@
+{
+  "name": "tetrominoes",
+  "version": "0.0.1",
+  "description": "A tetromino game with a time reversal function for Winter 2018 OSU Beaver Hackathon.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lawsonty/tetrominoes.git"
+  },
+  "contributors": [
+    {
+      "name": "Tyler Lawson",
+      "url": "https://github.com/Lawsonty"
+    },
+    {
+      "name": "Erich Kramer",
+      "url": "https://github.com/ErichKramer"
+    },
+    {
+      "name": "Christopher Carlsen",
+      "url": "https://github.com/CelticChristoph"
+    }
+  ],
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Lawsonty/tetrominoes/issues"
+  },
+  "homepage": "https://github.com/Lawsonty/tetrominoes#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
