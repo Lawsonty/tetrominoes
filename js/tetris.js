@@ -158,13 +158,13 @@ class State {
         this.add_tetramino()
     };
     //Horizonally shift the current tetramino by x
-    shiftx_tetramino(x){
+    shift_tetramino(x, y1){
         this.remove_tetramino()
         var points = this.tetraminoes.get_points()
-        points = points.map( (y) => [y[0] + x, y[1]] )
+        points = points.map( (y) => [y[0] + x, y[1] + y1] )
         //If there is not a collision, then translate the tetramino
         if(!this.collision(points)){
-           this.tetraminoes.translate(x, 0)
+           this.tetraminoes.translate(x, y1)
         }
         this.add_tetramino()
     };
@@ -176,11 +176,12 @@ class State {
     };
     //Clears out full rows and returns a list of rows that were cleared
     clear_rows(){
+        this.remove_tetramino()
         var clear = (x) => {
             for(var i = x; i < Y_BOUND - 1; i++){
                 this.free_blocks[i].forEach( (x, j) => {
-                    free_blocks[i][j] = free_blocks[i + 1][j]
-                    free_blocks[i+1][j] = [0, null]
+                    this.free_blocks[i][j] = this.free_blocks[i + 1][j]
+                    this.free_blocks[i+1][j] = [0, null]
                 })
             }
         }
@@ -189,7 +190,8 @@ class State {
                 clear(i)
                 i--
             }
-        })
+        }
+        this.add_tetramino()
     };
     //Remove tetramino from state grid
     remove_tetramino() {
