@@ -194,6 +194,19 @@ var state = {
             state.free_blocks[p[1]][p[0]] = [0, null]
         })
     },
+    //Resets states variables.
+    reset: () => {
+        state.tetraminoes = null
+        state.next = [new Tetramino(shapes[math.floor(math.random() * 7)])]
+        state.free_blocks = []
+        state.ticks = 0
+        for(var i = 0; i < Y_BOUND; i++){
+            state.free_blocks.push([])
+            for(var k = 0; k < X_BOUND; k++){
+                state.free_blocks[i].push([0, null]);
+            }
+        }
+    },
     //Return a list of points of all blocks in the game.
     get_points: () => {
         out = []
@@ -209,9 +222,4 @@ var state = {
     }
 }
 //Initialize state
-for(var i = 0; i < Y_BOUND; i++){
-    state.free_blocks.push([])
-    for(var k = 0; k < X_BOUND; k++){
-        state.free_blocks[i].push([0, null]);
-    }
-}
+state.reset()
