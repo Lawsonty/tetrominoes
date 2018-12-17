@@ -6,4 +6,6 @@ Controls
 
 Left/Right/Down - Move tetromino
 
+Up - Rotate tetromino
+
 Space - Reverse time
