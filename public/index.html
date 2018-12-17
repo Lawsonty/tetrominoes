@@ -46,9 +46,9 @@
                 if(!state.tick()){
                     pauseFunc();
                 }
+                state.clear_rows()
             }
             boardUpdate();
-            state.clear_rows()
             tickCount++;
         }
 
