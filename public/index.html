@@ -36,8 +36,13 @@
             document.getElementById("demo").innerHTML = updateHTML;
         }
 
+        function sigmoid(x){
+            return 2 * (((math.e ** x) / ((math.e ** x) + 1)) - 0.5)
+        }
         function myFunction() {
-            if (tickCount % 10 == 0) {
+            var factor = (math.e ** state.ticks)
+            if (tickCount % (
+                math.ceil(10 * (1 - sigmoid(state.ticks / 400) ))) == 0) {
                 if(!state.tick()){
                     pauseFunc();
                 }
