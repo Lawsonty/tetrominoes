@@ -1,6 +1,7 @@
 //Bounds for play area
 const X_BOUND = 10
 const Y_BOUND = 20
+const MAX_SAND = 10
 //Define the types of shapes
 const shapes = ['I', 'O', 'T', 'L', 'J', 'S', 'Z']
 
@@ -87,8 +88,10 @@ class State {
         this.tetraminoes = null;
         this.next = [];
         this.free_blocks = [];
+        this.history = [];
         this.ticks = 0;
         this.score = 0;
+        this.sand  = 0;
         this.reset()
     };
     //Advanced state one step.
@@ -126,6 +129,7 @@ class State {
                 console.log(this.tetraminoes.get_points())
                 var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND - 2)
                 this.tetraminoes = null
+                this.sand++
                 return !out
             } else {
                 //No collision, so move tetramino down.
@@ -135,6 +139,14 @@ class State {
         }
         //Update number of ticks. Used for determining speed, and possibly rewind feature.
         this.ticks += 1
+        var copy = new Tetramino(this.tetraminoes.shape);
+        copy.pos = {x: this.tetraminoes.pos.x, y: this.tetraminoes.pos.y}
+        console.log(copy.pos)
+        copy.points = this.tetraminoes.points.slice()
+        this.history.push( [this.free_blocks.map( (x) => x.slice()), copy])
+        if(this.history.length > MAX_SAND){
+            this.history.shift()
+        }
         return true
     };
     //Checks if points are already filled
@@ -220,6 +232,7 @@ class State {
                 this.free_blocks[i].push([0, null]);
             }
         }
+        this.history = []
     };
     //Return a list of points of all blocks in the game.
     get_points(){
@@ -233,6 +246,18 @@ class State {
             }
         }
         return out
+    }
+    //revert state back 1 tick
+    rewind(){
+        if(this.sand > 0){
+            var hist = this.history.pop()
+            this.free_blocks = hist[0]
+            if(hist[1] == null){
+                this.next.push(this.tetraminoes)
+            }
+            this.tetraminoes = hist[1]
+            this.sand--
+        }
     }
 }
 var state = new State()
