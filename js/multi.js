@@ -14,6 +14,6 @@ function sendBoard(board) {
 }
 
 socket.on('board', function(data) {
-  console.log(data.oppBoard);
+  // console.log(data.oppBoard);
   oppBoard.innerHTML = data.oppBoard;
 });

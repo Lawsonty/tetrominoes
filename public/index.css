@@ -3,6 +3,10 @@ body {
     float: left;
 }
 
+#boardConatiner {
+  display: inline-block;
+}
+
 span.block {
     display: inline-block;
     width: 30px;
@@ -13,6 +17,7 @@ span.block {
 }
 
 .board {
+  display: inline-block;
     border-style: solid;
 }
 

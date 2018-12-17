@@ -12,30 +12,54 @@
 
 <body>
     <!-- <p>Click the button to test the function.</p> -->
-    <div class=board id="myBoard"></div>
+    <div id="boardContainer">
+      <div class=board id="myBoard"></div>
+  
+      <div class=board id="oppBoard"></div>
+    </div>
 
     <script>
         var tickCount = 0;
         var intervalObj = null;
 
-        function boardUpdate() {
+        function initBoards() {
+
+        }
+
+        function boardUpdate(boardName) {
             var updateHTML = "";
             var blockColor = "";
 
-            for (var i = state.free_blocks.length - 1; i >= 0; i--) {
-                updateHTML += `<span class=row>`
-                for (var j = 0; j < state.free_blocks[i].length; j++) {
-                    if (state.free_blocks[i][j][1] == null) {
-                        updateHTML += `<span class=block>&nbsp;</span>`;
-                    } else {
-                        updateHTML += `<span class=block style="background-color:${state.free_blocks[i][j][1]}">&nbsp;</span>`;
+            if (boardName == 'myBoard'){
+                for (var i = state.free_blocks.length - 1; i >= 0; i--) {
+                    updateHTML += `<span class=row>`
+                    for (var j = 0; j < state.free_blocks[i].length; j++) {
+                        if (state.free_blocks[i][j][1] == null) {
+                            updateHTML += `<span class=block>&nbsp;</span>`;
+                        } else {
+                            updateHTML += `<span class=block style="background-color:${state.free_blocks[i][j][1]}">&nbsp;</span>`;
+                        }
+                        updateHTML += "</span>";
                     }
-                    updateHTML += "</span>";
+                    updateHTML += "<br>";
                 }
-                updateHTML += "<br>";
+            } else if (boardName == 'oppBoard') {
+                for (var i = state.free_blocks.length - 1; i >= 0; i--) {
+                    updateHTML += `<span class=row>`
+                    for (var j = 0; j < state.free_blocks[i].length; j++) {
+                        if (state.free_blocks[i][j][1] == null) {
+                            updateHTML += `<span class=block>&nbsp;</span>`;
+                        } else {
+                            updateHTML += `<span class=block style="background-color:${state.free_blocks[i][j][1]}">&nbsp;</span>`;
+                        }
+                        updateHTML += "</span>";
+                    }
+                    updateHTML += "<br>";
+                }
             }
-            document.getElementById("myBoard").innerHTML = updateHTML;
-            updateHTML += "Score: " + state.score
+
+            updateHTML += "Score: " + state.score;
+            document.getElementById(boardName).innerHTML = updateHTML;
         }
 
         function myFunction() {
@@ -47,24 +71,31 @@
             
             sendBoard(document.getElementById('myBoard').innerHTML);
 
-            boardUpdate();
-            state.clear_rows()
+            boardUpdate('myBoard');
+            state.clear_rows();
             tickCount++;
         }
 
+        function oppUpdate() {
+            boardUpdate
+        }
+
         document.addEventListener("keypress", function (event) {
-            if (event.keyCode == 37) {
+            if (event.code == "ArrowLeft") {
                 state.shift_tetramino(-1, 0);
             }
-            if (event.keyCode == 38) {
+            if (event.code == "ArrowUp") {
                 state.rotate_tetramino();
             }
-            if (event.keyCode == 39) {
+            if (event.code == "ArrowRight") {
                 state.shift_tetramino(1, 0);
             }
-            if (event.keyCode == 40) {
+            if (event.code == "ArrowDown") {
                 state.shift_tetramino(0, -1);
                 console.log("down");
+            }
+            if (event.code == "Space") {
+                console.log("space");
             }
         })
 
@@ -77,17 +108,21 @@
         function pauseFunc() {
             window.clearInterval(intervalObj);
             intervalObj = null;
+            boardUpdate('myBoard');
+            sendBoard(document.getElementById('myBoard').innerHTML);
         }
 
         function resetFunc() {
             pauseFunc();
             state.reset();
-            boardUpdate();
+            boardUpdate('myBoard');
+            sendBoard(document.getElementById('myBoard').innerHTML);
         }
 
-        boardUpdate();
+        boardUpdate('myBoard');
+        boardUpdate('oppBoard');
 
-        // onPageLoaded(document.getElementById('myBoard'));
+        onPageLoaded(document.getElementById('oppBoard'));
     </script>
 
     <div id="btnDiv">
