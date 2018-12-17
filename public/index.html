@@ -33,18 +33,24 @@
         }
 
         document.addEventListener("keypress", function (event) {
-            if (event.keyCode == 37) {
+            switch(event.code){
+                case "ArrowLeft": 
                 state.shift_tetramino(-1, 0);
-            }
-            if (event.keyCode == 38) {
-                state.rotate_tetramino();
-            }
-            if (event.keyCode == 39) {
-                state.shift_tetramino(1, 0);
-            }
-            if (event.keyCode == 40) {
-                state.shift_tetramino(0, -1);
-                console.log("down");
+                break;
+                case "ArrowUp":
+                    state.rotate_tetramino();
+                    break;
+                case "ArrowRight":
+                    state.shift_tetramino(1, 0);
+                    break;
+                case "ArrowDown":
+                    state.tick();
+                    console.log("down");
+                    break;
+                case "Space":
+                    console.log("space");
+                    state.rewind();
+                    break;
             }
         })
 
