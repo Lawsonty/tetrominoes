@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "A tetromino game with a time reversal function for Winter 2018 OSU Beaver Hackathon.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "nodemon node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Lawsonty/tetrominoes.git"
