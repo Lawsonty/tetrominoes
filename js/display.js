@@ -47,24 +47,54 @@ const chunk_size = 40;
 
 
 
-function gen_block(x, y, color){
+function gen_block(x, y, color, wireframe){
     //inside this function we scale x and y based on chunk_size size 
     //currently we ignore color. 
     var g = new THREE.BoxGeometry(chunk_size,chunk_size,chunk_size);
+
+    if(!color){ console.log(color);color = 0xaaaaaa;}
+    else{
+        console.log(color);
+    }
+
+    if(wireframe){
+
+        var m = new THREE.MeshStandardMaterial( {color: 0x000000, wireframe: wireframe} );
+    }
+    else{
+        var m = new THREE.MeshStandardMaterial( );
+        m.color = new THREE.Color( color );
+    }
+    //var g = new THREE.ExtrudeGeometry(shape, extrudeSettings);
     //either apply the color or put a normal object if undef.
+    /*
     if (color) {
+
         var m = new THREE.MeshStandardMaterial();
         m.color = new THREE.Color( color );
-        //var material = new THREE.ShaderMaterial( {
-/*FILL THIS IN*/
-        //});
-    }
-    else{ var m = new THREE.MeshNormalMaterial(); }
+
+        var uniforms = {
+            time:{ type: "f", value:0},
+            color: {type: "i", value: color}
+        };
+
+        
+        /*var m = new THREE.ShaderMaterial( {
+            uniforms: uniforms,
+            vertexShader: document.getElementById('t_vert_shader').innerHTML,
+            fragmentShader: document.getElementById('t_frag_shader').innerHTML,
+        });*/
+    //}
+    //else{ var m = new THREE.MeshNormalMaterial(); }
+    
 
     var tmp = new THREE.Mesh(g, m);
+    g.dispose();
+    m.dispose();
     tmp.position.x = (x + .5) * chunk_size; //offset of the centers so that bottom left corner is in (0,0)
     tmp.position.y = (y + .5) * chunk_size;
     tmp.position.z = 0;
+
     return tmp;
 }
 
@@ -98,19 +128,30 @@ class Display{
 
 
         /*ADD AMBIENT LIGHT OBJECT*/
-        this.light = new THREE.AmbientLight( 0xffffff, 2.0 );
-        this.light.castShadow = true;
-        //this.scene.add(this.light);
 
-        this.light = new THREE.PointLight( 0xffffff, 100.0, 600);
+        this.light = new THREE.PointLight( 0xffffff, 10.0, 600);
         this.light.position.set( chunk_size*(TETRIS_COL/2), chunk_size*(TETRIS_ROW/2), 300);
         this.scene.add(this.light);
 
 
-
-
         this.draw_frame();
     };
+
+
+
+
+
+    clearThree(obj){
+        while(obj.children.length > 0){ 
+            clearThree(obj.children[0]);
+            obj.remove(obj.children[0]);
+        } 
+        if(obj.geometry) obj.geometry.dispose();
+        if(obj.material) obj.material.dispose();
+        if(obj.texture) obj.texture.dispose();
+    };  
+
+
 
     new_scene(g){
         var s = new THREE.Scene;
@@ -124,10 +165,12 @@ class Display{
         //have to define i < 20 here. 
         for( var i = 0; i < TETRIS_ROW; i++){
             for( var j = 0; j < TETRIS_COL; j++){
-                var current = g[i][j]
+                var current = g[i][j];
                 
                 if( current[0] ){
-                    var block = gen_block( j, i, current[1]);
+                    var block = gen_block( j, i, current[1], false);
+                    s.add(block);
+                    block = gen_block( j, i, current[1], true);
                     s.add(block);
                 }
             }
@@ -143,7 +186,9 @@ class Display{
     };
 
     display(grid){
+        var tmp = this.scene;
         this.scene = this.new_scene(grid);
+        clearThree(tmp);
         return;
     };
 

@@ -15,10 +15,6 @@
     <canvas id="tetro_window" width="400" height="800" style="border:1px solid #000000;" >
     </canvas>
 
-    <script id="t_vert_shader" type="x-shader/x-vertex">
-        uniform float time;
-    
-    </script>
 
 
     <script>
@@ -31,8 +27,8 @@
                 if(!state.tick()){
                     pauseFunc();
                 }
-            }
             disp.display(state.free_blocks);
+            }
             tickCount++;
         }
 
@@ -55,7 +51,7 @@
         function startFunc() {
             if (intervalObj == null) {
                 //disp = new Display("tetro_window");
-                intervalObj = window.setInterval(myFunction, 100);
+                intervalObj = window.setInterval(myFunction, 500);
             }            
         }
 
