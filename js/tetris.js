@@ -114,7 +114,6 @@ class State {
         if(this.tetraminoes == null) {
             var s = shapes[math.floor(math.random() * 7)]
             this.tetraminoes = this.next.pop()
-            console.log(this.tetraminoes)
             if(this.next.length == 0){
                 this.next.push(new Tetramino(s))
             }
@@ -126,7 +125,6 @@ class State {
             //Set current tetramino to null
             if(coll){
                 this.add_tetramino()
-                console.log(this.tetraminoes.get_points())
                 var out = this.tetraminoes.get_points().some( (x) => x[1] >= Y_BOUND - 2)
                 this.tetraminoes = null
                 this.sand++
@@ -141,7 +139,6 @@ class State {
         this.ticks += 1
         var copy = new Tetramino(this.tetraminoes.shape);
         copy.pos = {x: this.tetraminoes.pos.x, y: this.tetraminoes.pos.y}
-        console.log(copy.pos)
         copy.points = this.tetraminoes.points.slice()
         this.history.push( [this.free_blocks.map( (x) => x.slice()), copy])
         if(this.history.length > MAX_SAND){
