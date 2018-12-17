@@ -2,6 +2,8 @@
 <meta charset="UTF-8" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js" type="text/javascript"></script>
 <script src="js/tetris.js" type="text/javascript"></script>
+<script src="js/three.js" type="text/javascript"></script>
+<script src="js/display.js" type="text/javascript"></script>
 
 <head>
     <link rel="stylesheet" href="/public/index.css">
@@ -10,17 +12,23 @@
 
 <body>
     <!-- <p>Click the button to test the function.</p> -->
+    <div>
+    <canvas id="tetro_canvas" width=400 height=800 style="border:1px solid #000000;"></canvas>
+    </div>
+    <p>
     <div id="demo"></div>
-
+    </p>
     <script>
         var tickCount = 0;
         var intervalObj = null;
+        var disp = new Display("tetro_canvas");
+
 
         function boardUpdate() {
             var updateHTML = "";
             var blockColor = "";
-
-            for (var i = state.free_blocks.length - 1; i >= 0; i--) {
+            disp.display(state.free_blocks);
+            /*for (var i = state.free_blocks.length - 1; i >= 0; i--) {
                 updateHTML += `<span class=row>`
                 for (var j = 0; j < state.free_blocks[i].length; j++) {
                     if (state.free_blocks[i][j][1] == null) {
@@ -31,8 +39,10 @@
                     updateHTML += "</span>";
                 }
                 updateHTML += "<br>";
-            }
-            updateHTML += "Score: " + state.score
+            }*/
+            updateHTML += "Score: " + state.score;
+            updateHTML += "\nSand: " + state.sand;
+
             document.getElementById("demo").innerHTML = updateHTML;
         }
 

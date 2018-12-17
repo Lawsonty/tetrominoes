@@ -12,6 +12,16 @@ app.get("/js/tetris.js", (req, res) =>
   res.sendFile(path.join(__dirname + "/js/tetris.js"))
 );
 
+
+app.get("/js/three.js", (req, res) =>
+  res.sendFile(path.join(__dirname + "/js/three.js"))
+);
+
+
+app.get("/js/display.js", (req, res) =>
+  res.sendFile(path.join(__dirname + "/js/display.js"))
+);
+
 app.get("/public/index.css", (req,res) => 
   res.sendFile(path.join(__dirname + "/public/index.css"))
 );
