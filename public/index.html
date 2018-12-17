@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <meta charset="UTF-8" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.0/math.min.js" type="text/javascript"></script>
-<script src = "js/three.js" type="text/javascript"></script>
 <script src="js/tetris.js" type="text/javascript"></script>
-<script src = "js/display.js" type="text/javascript"></script>
+<script src="js/three.js" type="text/javascript"></script>
+<script src="js/display.js" type="text/javascript"></script>
 
 <head>
     <link rel="stylesheet" href="/public/index.css">
@@ -12,23 +12,44 @@
 
 <body>
     <!-- <p>Click the button to test the function.</p> -->
-    <canvas id="tetro_window" width="400" height="800" style="border:1px solid #000000;" >
+    <canvas id="tetro_canvas" width=400 height=800 style="border:1px solid #000000;">
     </canvas>
-
-
+    <div id="demo"></div>
 
     <script>
         var tickCount = 0;
         var intervalObj = null;
-        var disp = new Display("tetro_window");
+
+        var disp = new Display("tetro_canvas");       
+        function boardUpdate() {
+            var updateHTML = "";
+            var blockColor = "";
+            disp.display(state.free_blocks);
+            /*for (var i = state.free_blocks.length - 1; i >= 0; i--) {
+                updateHTML += `<span class=row>`
+                for (var j = 0; j < state.free_blocks[i].length; j++) {
+                    if (state.free_blocks[i][j][1] == null) {
+                        updateHTML += `<span class=block>&nbsp;</span>`;
+                    } else {
+                        updateHTML += `<span class=block style="background-color:${state.free_blocks[i][j][1]}">&nbsp;</span>`;
+                    }
+                    updateHTML += "</span>";
+                }
+                updateHTML += "<br>";
+            }*/
+            updateHTML += "Score: " + state.score;
+            updateHTML += "Sand: " + state.sand;
+            document.getElementById("demo").innerHTML = updateHTML;
+        }
 
         function myFunction() {
             if (tickCount % 10 == 0) {
                 if(!state.tick()){
                     pauseFunc();
                 }
-            disp.display(state.free_blocks);
             }
+            boardUpdate();
+            state.clear_rows()
             tickCount++;
         }
 
@@ -56,8 +77,7 @@
 
         function startFunc() {
             if (intervalObj == null) {
-                //disp = new Display("tetro_window");
-                intervalObj = window.setInterval(myFunction, 500);
+                intervalObj = window.setInterval(myFunction, 100);
             }            
         }
 
@@ -69,10 +89,10 @@
         function resetFunc() {
             pauseFunc();
             state.reset();
-            disp.display(state.free_blocks);
+            boardUpdate();
         }
 
-        //boardUpdate();
+        boardUpdate();
     </script>
 
     <div id="btnDiv">

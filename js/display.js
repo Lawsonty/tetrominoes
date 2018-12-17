@@ -14,7 +14,7 @@ matrix[3][0] = [1, "#0000FF"];
 matrix[4][0] = [1, "#FFA500"];
 matrix[2][1] = [1, "#008000"];
 matrix[4][1] = [1, "#FF0000"];
-
+/*
 matrix[0][3] = [1];
 matrix[1][3] = [1];
 matrix[2][3] = [1];
@@ -23,18 +23,7 @@ matrix[0][5] = [1];
 matrix[1][5] = [1];
 matrix[2][5] = [1];
 
-matrix[0][7] = [1];
-matrix[1][7] = [1];
-matrix[2][7] = [1];
-matrix[3][7] = [1];
-matrix[4][7] = [1];
-
-matrix[2][8] = [1];
-matrix[3][9] = [1];
-matrix[1][9] = [1];
-matrix[0][10] = [1];
-matrix[4][10] = [1];
-
+*/
 //display(matrix)
 
 
